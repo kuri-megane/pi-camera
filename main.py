@@ -17,6 +17,7 @@ def main():
     notifier = Notify()
 
     notifier.send_with_text(text='監視カメラが作動し始めました')
+    print('監視カメラ スタート')
 
     c = 0
     while c < INTERVAL:
@@ -38,11 +39,14 @@ def main():
 
         # 通知
         if is_diff:
+            print('差分あり')
+            print(after_time)
             notifier.send_with_image(text=after_time, img=after_file)
 
         c += 1
 
     notifier.send_with_text(text='監視カメラが終了しました')
+    print('監視カメラ スタート')
 
 
 if __name__ == '__main__':
