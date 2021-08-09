@@ -5,6 +5,10 @@ from line import Notify
 import time
 import datetime
 
+# 現在の設定では1実行60分，30秒周期で監視
+INTERVAL = 60 * 2
+DIFF_SEC = 29
+
 
 def main():
 
@@ -12,14 +16,17 @@ def main():
     differ = ImageDiff()
     notifier = Notify()
 
-    while True:
+    notifier.send_with_text(text='監視カメラが作動し始めました')
+
+    c = 0
+    while c < INTERVAL:
         # 1枚目の取得
         before_time = datetime.datetime.now().strftime('%H:%M:%S')
         before_file = f'data/{before_time}.png'
         camera.capture(save_path=before_file)
 
         # 待機
-        time.sleep(10)
+        time.sleep(DIFF_SEC)
 
         # 2枚目の取得
         after_time = datetime.datetime.now().strftime('%H:%M:%S')
@@ -32,6 +39,10 @@ def main():
         # 通知
         if is_diff:
             notifier.send_with_image(text=after_time, img=after_file)
+
+        c += 1
+
+    notifier.send_with_text(text='監視カメラが終了しました')
 
 
 if __name__ == '__main__':
