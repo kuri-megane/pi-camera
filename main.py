@@ -5,9 +5,9 @@ from line import Notify
 import time
 import datetime
 
-# 現在の設定では1実行30分，15秒周期で監視
-INTERVAL = 30 * 2
-DIFF_SEC = 29
+# 現在の設定では1実行30分，約15秒周期で監視
+INTERVAL = 30 * 4
+DIFF_SEC = 15
 
 
 def main():
@@ -46,7 +46,7 @@ def main():
         c += 1
 
     notifier.send_with_text(text='監視カメラが終了しました')
-    print('監視カメラ スタート')
+    print('監視カメラ 終了')
 
 
 if __name__ == '__main__':
