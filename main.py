@@ -5,9 +5,9 @@ from line import Notify
 import time
 import datetime
 
-# 現在の設定では1実行30分，約15秒周期で監視
-INTERVAL = 30 * 4
-DIFF_SEC = 15
+# 現在の設定では1実行60分，約15秒周期で監視
+INTERVAL = 60 * 4
+DIFF_SEC = 14
 
 
 def main():
