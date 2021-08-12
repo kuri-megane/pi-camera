@@ -36,4 +36,4 @@ class Camera:
 
 if __name__ == '__main__':
     camera = Camera()
-    camera.capture(save_path='tests/resources/hoge.png')
+    camera.capture(save_path='tests/data/hoge.png')
