@@ -1,6 +1,6 @@
 from camera import Camera
 from image_diff import ImageDiff
-from line import Notify
+from slack import Notify
 
 import time
 import datetime
