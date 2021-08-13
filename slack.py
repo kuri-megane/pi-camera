@@ -53,5 +53,9 @@ class Notify:
 
 if __name__ == '__main__':
     notifier = Notify()
-    notifier.send_with_image(img='tests/resources/1.png', text='test')
+    r = notifier.send_with_image(img='tests/resources/1.png', text='test')
+    print(r.status_code)
+    print(r.headers)
+    print(r.content)
+    notifier._record_response(text='test', res=r)
     notifier.send_with_text(text='test')
