@@ -21,19 +21,24 @@ def main():
     notifier.send_with_text(text='監視カメラが作動し始めました')
     logger.log_info(msg='監視カメラ スタート')
 
+    # 保存先の作成
+    today = datetime.datetime.today().strftime('%Y%m%d')
+    os.makedirs(name=f'./data/{today}', exist_ok=True)
+
     c = 0
     while c < INTERVAL:
+
+        now = datetime.datetime.now().strftime('%H%M%S')
+
         # 1枚目の取得
-        before_time = datetime.datetime.now().strftime('%H:%M:%S')
-        before_file = f'data/{before_time}.png'
+        before_file = f'./data/{today}/{now}_0.png'
         camera.capture(save_path=before_file)
 
         # 待機
         time.sleep(DIFF_SEC)
 
         # 2枚目の取得
-        after_time = datetime.datetime.now().strftime('%H:%M:%S')
-        after_file = f'data/{after_time}.png'
+        after_file = f'./data/{today}/{now}_1.png'
         camera.capture(save_path=after_file)
 
         # 差分確認
@@ -41,8 +46,10 @@ def main():
 
         # 通知
         if is_diff:
-            logger.log_info('差分あり')
-            notifier.send_with_image(text=after_time, img=after_file)
+            logger.log_info(msg='差分あり')
+            notifier.send_with_image(text=now, img=after_file)
+        else:
+            logger.log_info(msg='差分なし')
 
         c += 1
 

@@ -7,7 +7,7 @@ class Log:
 
     def __init__(self):
         logger = logging.getLogger(__name__)
-        fl = logging.FileHandler(filename='pi-camera.log')
+        fl = logging.FileHandler(filename='./log/pi-camera.log')
         logger.addHandler(fl)
         logger.setLevel(LOG_LEVEL)
         fl.setLevel(LOG_LEVEL)
