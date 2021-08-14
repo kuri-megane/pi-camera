@@ -1,9 +1,11 @@
+import datetime
+import os
+import time
+
 from camera import Camera
 from image_diff import ImageDiff
+from log import Log
 from slack import Notify
-
-import time
-import datetime
 
 # 現在の設定では1実行60分，約15秒周期で監視
 INTERVAL = 60 * 4
@@ -11,13 +13,13 @@ DIFF_SEC = 14
 
 
 def main():
-
-    camera = Camera()
-    differ = ImageDiff()
-    notifier = Notify()
+    logger = Log()
+    camera = Camera(logger=logger)
+    differ = ImageDiff(logger=logger)
+    notifier = Notify(logger=logger)
 
     notifier.send_with_text(text='監視カメラが作動し始めました')
-    print('監視カメラ スタート')
+    logger.log_info(msg='監視カメラ スタート')
 
     c = 0
     while c < INTERVAL:
@@ -39,14 +41,13 @@ def main():
 
         # 通知
         if is_diff:
-            print('差分あり')
-            print(after_time)
+            logger.log_info('差分あり')
             notifier.send_with_image(text=after_time, img=after_file)
 
         c += 1
 
     notifier.send_with_text(text='監視カメラが終了しました')
-    print('監視カメラ 終了')
+    logger.log_info(msg='監視カメラ 終了')
 
 
 if __name__ == '__main__':

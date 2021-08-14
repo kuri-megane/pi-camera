@@ -1,7 +1,7 @@
-import datetime
 import requests
 
 import credentials
+from log import Log
 
 SLACk_URL = 'https://slack.com/api/'
 SLACK_MESSAGE_ENDPOINT = 'chat.postMessage'
@@ -12,15 +12,13 @@ SLACK_TOKEN = credentials.SLACK_TOKEN
 
 class Notify:
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.send_cnt = 0
 
-    def _record_response(self, text, res):
-        send_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        f_name = f'log/log_{send_time}_{res.status_code}.txt'
-        with open(f_name, 'a') as f:
-            s = f"{send_time}({self.send_cnt}): {text} -> {res.status_code}, {res.text}\n"
-            f.write(s)
+        if 'logger' in kwargs:
+            self.logger = kwargs['logger']
+        else:
+            self.logger = Log()
 
     def send_with_image(self, img, text):
         ret = requests.post(
@@ -35,6 +33,9 @@ class Notify:
                 'file': open(img, 'rb'),
             }
         )
+        self.logger.log_info(msg=f'status code: {ret.status_code}')
+        self.logger.log_info(msg=f'response text: {ret.text}')
+        self.logger.log_info(msg=f'send count: {self.send_cnt}')
         self.send_cnt += 1
         return ret
 
@@ -47,6 +48,9 @@ class Notify:
             },
             headers={'Authorization': 'Bearer ' + SLACK_TOKEN},
         )
+        self.logger.log_info(msg=f'status code: {ret.status_code}')
+        self.logger.log_info(msg=f'response text: {ret.text}')
+        self.logger.log_info(msg=f'send count: {self.send_cnt}')
         self.send_cnt += 1
         return ret
 
@@ -57,5 +61,4 @@ if __name__ == '__main__':
     print(r.status_code)
     print(r.headers)
     print(r.content)
-    notifier._record_response(text='test', res=r)
     notifier.send_with_text(text='test')

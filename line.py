@@ -1,8 +1,9 @@
 import os
-import datetime
+
 import requests
 
 import credentials
+from log import Log
 
 LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify'
 LINE_NOTIFY_TOKEN = credentials.LINE_NOTIFY_TOKEN
@@ -12,45 +13,45 @@ class Notify:
 
     def __init__(self):
         self.send_cnt = 0
+        self.logger = Log()
 
-    def _send(self, **kwargs):
-        data = kwargs.get('data', None)
-        file = kwargs.get('file', None)
+    def write_log_info(self, response):
+        self.logger.log_info(msg=f'status code: {response.status_code}')
+        self.logger.log_info(msg=f'response text: {response.text}')
+        self.logger.log_info(msg=f'send count: {self.send_cnt}')
+
+    def write_log_err(self, response):
+        self.logger.log_error(msg=f'status code: {response.status_code}')
+        self.logger.log_error(msg=f'response text: {response.text}')
+        self.logger.log_error(msg=f'send count: {self.send_cnt}')
+
+    def send_with_image(self, img, text):
+        os.path.isfile(img)
         ret = requests.post(
             url=LINE_NOTIFY_URL,
-            data=data,
+            data={'message': text},
             headers={'Authorization': 'Bearer ' + LINE_NOTIFY_TOKEN},
-            files=file
+            files={'imageFile': open(img, 'rb')}
         )
+        if ret.status_code == 200:
+            self.write_log_info(response=ret)
+        else:
+            self.write_log_err(response=ret)
         self.send_cnt += 1
         return ret
 
-    @staticmethod
-    def _build_data(text):
-        return {'message': text}
-
-    @staticmethod
-    def _build_file(img):
-        os.path.isfile(img)
-        return {'imageFile': open(img, 'rb')}
-
-    def _record_response(self, text, res):
-        send_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        f_name = f'log/log_{send_time}_{res.status_code}.txt'
-        with open(f_name, 'a') as f:
-            s = f"{send_time}({self.send_cnt}): {text} -> {res.status_code}, {res.text}\n"
-            f.write(s)
-
-    def send_with_image(self, img, text):
-        data = self._build_data(text=text)
-        file = self._build_file(img=img)
-        res = self._send(data=data, file=file)
-        self._record_response(text=text, res=res)
-
     def send_with_text(self, text):
-        data = self._build_data(text=text)
-        res = self._send(data=data)
-        self._record_response(text=text, res=res)
+        ret = requests.post(
+            url=LINE_NOTIFY_URL,
+            data={'message': text},
+            headers={'Authorization': 'Bearer ' + LINE_NOTIFY_TOKEN},
+        )
+        if ret.status_code == 200:
+            self.write_log_info(response=ret)
+        else:
+            self.write_log_err(response=ret)
+        self.send_cnt += 1
+        return ret
 
 
 if __name__ == '__main__':

@@ -1,14 +1,21 @@
 import cv2
 
+from log import Log
+
 # 使用するカメラを指定 0が内蔵
 DEVICE_ID = 0
 
 
 class Camera:
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.camera = None
         self.frame = None
+
+        if 'logger' in kwargs:
+            self.logger = kwargs['logger']
+        else:
+            self.logger = Log()
 
     def _open(self):
         self.camera = cv2.VideoCapture(DEVICE_ID)

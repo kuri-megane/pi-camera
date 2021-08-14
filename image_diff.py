@@ -3,6 +3,8 @@ import os.path
 import cv2
 import numpy as np
 
+from log import Log
+
 # 二値化のしきい値 夕焼けなどの影響を防ぎたい
 BINARY_THRESHOLD = 60
 # 膨張収縮の近傍画素指定 2:4近傍, 3:8近傍
@@ -12,6 +14,12 @@ COUNT_THRESHOLD = 0.1
 
 
 class ImageDiff:
+
+    def __init__(self, **kwargs):
+        if 'logger' in kwargs:
+            self.logger = kwargs['logger']
+        else:
+            self.logger = Log()
 
     @staticmethod
     def _read(img_path):
@@ -32,12 +40,13 @@ class ImageDiff:
         dilate = cv2.dilate(erode, operator, iterations=4)
         return dilate
 
-    @staticmethod
-    def _is_diff(binary_img):
+    def _is_diff(self, binary_img):
         # 差分画素のカウント
         count = np.sum(binary_img) / 255
+        self.logger.log_info(msg=f'差分カウント: {count}')
         # 割合算出
         percentage = count / np.size(binary_img)
+        self.logger.log_info(msg=f'差分割合: {percentage}')
         # 判定
         if percentage > COUNT_THRESHOLD:
             return True
