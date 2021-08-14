@@ -1,13 +1,13 @@
 import datetime
-import os
-
 import requests
+
+import credentials
 
 SLACk_URL = 'https://slack.com/api/'
 SLACK_MESSAGE_ENDPOINT = 'chat.postMessage'
 SLACK_FILE_ENDPOINT = 'files.upload'
-SLACK_CHANNEL = os.environ['SLACK_CHANNEL']
-SLACK_TOKEN = os.environ['SLACK_TOKEN']
+SLACK_CHANNEL = credentials.SLACK_CHANNEL
+SLACK_TOKEN = credentials.SLACK_TOKEN
 
 
 class Notify:

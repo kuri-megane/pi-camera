@@ -2,8 +2,10 @@ import os
 import datetime
 import requests
 
+import credentials
+
 LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify'
-LINE_NOTIFY_TOKEN = os.environ['LINE_NOTIFY_TOKEN']
+LINE_NOTIFY_TOKEN = credentials.LINE_NOTIFY_TOKEN
 
 
 class Notify:

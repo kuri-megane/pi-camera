@@ -1,0 +1,5 @@
+import os
+
+LINE_NOTIFY_TOKEN = os.environ['LINE_NOTIFY_TOKEN']
+SLACK_CHANNEL = os.environ['SLACK_CHANNEL']
+SLACK_TOKEN = os.environ['SLACK_TOKEN']
