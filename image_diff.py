@@ -6,11 +6,11 @@ import numpy as np
 from log import Log
 
 # 二値化のしきい値 夕焼けなどの影響を防ぎたい
-BINARY_THRESHOLD = 60
+BINARY_THRESHOLD = 20
 # 膨張収縮の近傍画素指定 2:4近傍, 3:8近傍
 MASK_SIZE = 4
 # 差分があったと判定する画素数の割合
-COUNT_THRESHOLD = 0.1
+COUNT_THRESHOLD = 0.01
 
 
 class ImageDiff:
