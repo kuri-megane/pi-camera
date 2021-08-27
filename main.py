@@ -7,9 +7,9 @@ from image_diff import ImageDiff
 from log import Log
 from slack import Notify
 
-# 現在の設定では1実行60分，約15秒周期で監視
-INTERVAL = 60 * 4
-DIFF_SEC = 14
+# 現在の設定では1実行1分，約15秒周期で監視
+INTERVAL = 4
+DIFF_SEC = 13
 
 
 def main():
@@ -31,14 +31,14 @@ def main():
         now = datetime.datetime.now().strftime('%H%M%S')
 
         # 1枚目の取得
-        before_file = f'./data/{today}/{now}_0.png'
+        before_file = f'./data/{today}/{now}.png'
         camera.capture(save_path=before_file)
 
         # 待機
         time.sleep(DIFF_SEC)
 
         # 2枚目の取得
-        after_file = f'./data/{today}/{now}_1.png'
+        after_file = f'./data/latest.png'
         camera.capture(save_path=after_file)
 
         # 差分確認
