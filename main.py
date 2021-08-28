@@ -18,7 +18,6 @@ def main():
     differ = ImageDiff(logger=logger)
     notifier = Notify(logger=logger)
 
-    notifier.send_with_text(text='監視カメラが作動し始めました')
     logger.log_info(msg='監視カメラ スタート')
 
     # 保存先の作成
@@ -53,7 +52,6 @@ def main():
 
         c += 1
 
-    notifier.send_with_text(text='監視カメラが終了しました')
     logger.log_info(msg='監視カメラ 終了')
 
 
