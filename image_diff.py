@@ -21,9 +21,13 @@ class ImageDiff:
         else:
             self.logger = Log()
 
-    @staticmethod
-    def _read(img_path):
-        os.path.isfile(img_path)
+    def _read(self, img_path):
+        # ファイルがあるか
+        if not os.path.isfile(img_path):
+            self.logger.log_error(msg=f'ファイルなし: {img_path}')
+            return None
+
+        # グレースケールで読み込み
         c_img = cv2.imread(filename=img_path)
         g_img = cv2.cvtColor(src=c_img, code=cv2.COLOR_BGR2GRAY)
         return g_img
@@ -55,6 +59,9 @@ class ImageDiff:
     def check(self, before_img, after_img):
         before_img = self._read(img_path=before_img)
         after_img = self._read(img_path=after_img)
+        if before_img is None or after_img is None:
+            self.logger.log_error(msg=f'ファイルなしで処理続行')
+            return False
         binary_img = self._convert_diff_img(before_img=before_img, after_img=after_img)
         return self._is_diff(binary_img=binary_img)
 

@@ -11,7 +11,7 @@ class Log:
         logger.addHandler(fl)
         logger.setLevel(LOG_LEVEL)
         fl.setLevel(LOG_LEVEL)
-        fmt = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%dT%H:%M:%S")
+        fmt = logging.Formatter("%(thread)s %(asctime)s %(levelname)s : %(message)s", "%Y-%m-%dT%H:%M:%S")
         fl.setFormatter(fmt)
         self.logger = logger
 

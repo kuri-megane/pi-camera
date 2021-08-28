@@ -21,15 +21,28 @@ class Camera:
         self.camera = cv2.VideoCapture(DEVICE_ID)
 
     def _get(self):
+        # カメラの準備ができているか
+        if not self.camera.isOpened():
+            self.logger.log_error('カメラオープンエラー')
+            return
+
         # 読み込み
         ret, self.frame = self.camera.read()
+
         # 撮影失敗時
         if not ret:
             self.frame = None
+            self.logger.log_error('撮影失敗 ret false')
+            return
+        if self.frame is None:
+            self.logger.log_error('撮影失敗 frame 空')
+            return
 
     def _save(self, save_path):
-        if self.frame is not None:
-            cv2.imwrite(filename=save_path, img=self.frame)
+        if self.frame is None:
+            self.logger.log_error('画像保存失敗')
+            return
+        cv2.imwrite(filename=save_path, img=self.frame)
 
     def _close(self):
         self.camera = None
