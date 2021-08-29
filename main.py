@@ -9,7 +9,7 @@ from slack import Notify
 
 # 現在の設定では1実行1分，約15秒周期で監視
 INTERVAL = 4
-DIFF_SEC = 13
+DIFF_SEC = 12
 
 
 def main():
