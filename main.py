@@ -7,10 +7,10 @@ from image_diff import ImageDiff
 from log import Log
 from slack import Notify
 
-# 現在の設定では1実行1分，約15秒周期で監視
+# 現在の設定では1実行60分，約15秒周期で監視
 # record.shでタイムアウトを設定しているので超えないようにする
-INTERVAL = 4
-DIFF_SEC = 12
+INTERVAL = 4 * 60
+DIFF_SEC = 14
 
 
 def main():
@@ -20,6 +20,7 @@ def main():
     notifier = Notify(logger=logger)
 
     logger.log_info(msg='監視カメラ スタート')
+    notifier.send_with_text(text='監視カメラ スタート')
 
     # 保存先の作成
     today = datetime.datetime.today().strftime('%Y%m%d')
@@ -54,7 +55,7 @@ def main():
         c += 1
 
     logger.log_info(msg='監視カメラ 終了')
-
+    notifier.send_with_text(text='監視カメラ 終了')
 
 if __name__ == '__main__':
     main()
